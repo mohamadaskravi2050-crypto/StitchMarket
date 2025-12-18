@@ -1,0 +1,153 @@
+<!-- base.html (همان کد شما) -->
+{% load static %}
+<!DOCTYPE html> 
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سبزکار | {% block title %}پلتفرم آنلاین خیاطی و مد{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- هدر اصلی -->
+    <header id="main-header">
+        <div class="header-container">
+            <!-- لوگو -->
+            <a href="{% url 'main:home' %}" class="logo">
+                <i class="fas fa-leaf logo-icon"></i>
+                <div class="logo-text">سبز<span>کار</span></div>
+            </a>
+            
+            <!-- منوی ناوبری -->
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="{% url 'main:home' %}"><i class="fas fa-home"></i> خانه</a></li>
+                    <li><a href="{% url 'main:home' %}#about-section"><i class="fas fa-info-circle"></i> درباره ما</a></li>
+                    <li><a href="{% url 'main:home' %}#services-section"><i class="fas fa-cut"></i> خدمات</a></li>
+                    <li><a href="{% url 'main:home' %}#contact"><i class="fas fa-envelope"></i> تماس با ما</a></li>
+                </ul>
+            </nav>
+            
+            <!-- بخش جستجو -->
+            <div class="search-section">
+                <div class="search-box">
+                    <input type="text" placeholder="جستجو...">
+                    <button class="search-btn"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+            
+            <!-- دکمه‌های احراز هویت -->
+            <div class="auth-buttons">
+                {% if user.is_authenticated %}
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <a href="{% url 'main:profile' %}" class="profile-icon" title="پروفایل" style="
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 50%;
+                        background-color: var(--primary-green);
+                        color: white;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-weight: bold;
+                        text-decoration: none;
+                    ">
+                        {{ user.username|first|upper }}
+                    </a>
+                    <a href="{% url 'main:logout' %}" class="btn login-btn" style="padding: 10px 20px;">
+                        <i class="fas fa-sign-out-alt"></i> خروج
+                    </a>
+                </div>
+                {% else %}
+                <div style="display: flex; gap: 10px;">
+                    <a href="{% url 'main:customer_auth' %}" class="btn login-btn">
+                        <i class="fas fa-user"></i> ورود مشتری
+                    </a>
+                    <a href="{% url 'main:tailor_auth' %}" class="btn register-btn">
+                        <i class="fas fa-cut"></i> ورود خیاط
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- آیکون منو برای موبایل -->
+            <div class="menu-toggle" id="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+    
+    <!-- نمایش پیام‌ها -->
+    {% if messages %}
+    <div class="messages-container">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <!-- محتوای اصلی -->
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    
+    <!-- فوتر -->
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>درباره سبزکار</h3>
+                <p>سبزکار اولین پلتفرم تخصصی خدمات خیاطی آنلاین در ایران است که ارتباط مستقیم بین مشتریان و خیاطان حرفه‌ای را فراهم می‌کند.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-telegram"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3>لینک‌های سریع</h3>
+                <ul class="footer-links">
+                    <li><a href="{% url 'main:home' %}"><i class="fas fa-chevron-left"></i> صفحه اصلی</a></li>
+                    <li><a href="{% url 'main:home' %}#about-section"><i class="fas fa-chevron-left"></i> درباره ما</a></li>
+                    <li><a href="{% url 'main:home' %}#services-section"><i class="fas fa-chevron-left"></i> خدمات</a></li>
+                    <li><a href="{% url 'main:home' %}#contact"><i class="fas fa-chevron-left"></i> تماس با ما</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>خدمات مشتریان</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-chevron-left"></i> راهنمای خرید</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-left"></i> سوالات متداول</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-left"></i> شرایط استفاده</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-left"></i> حریم خصوصی</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>تماس با ما</h3>
+                <p><i class="fas fa-map-marker-alt"></i> تهران، خیابان ولیعصر</p>
+                <p><i class="fas fa-phone"></i> ۰۲۱-۱۲۳۴۵۶۷۸</p>
+                <p><i class="fas fa-envelope"></i> info@sezkar.com</p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>تمامی حقوق این وبسایت متعلق به سبزکار می‌باشد © ۲۰۲۳</p>
+        </div>
+    </footer>
+    
+    <!-- اسکریپت‌ها -->
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,804 @@
+{% load static %}
+<!DOCTYPE html> 
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سبزکار | پلتفرم آنلاین خیاطی و مد</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/hero.css' %}">
+    <link rel="stylesheet" href="{% static 'css/products.css' %}">
+    <link rel="stylesheet" href="{% static 'css/about.css' %}">
+</head>
+<body>
+    <!-- هدر اصلی -->
+    <header id="main-header">
+        <div class="header-container">
+            <!-- لوگو -->
+            <a href="{% url 'main:home' %}" class="logo">
+                <i class="fas fa-leaf logo-icon"></i>
+                <div class="logo-text">سبز<span>کار</span></div>
+            </a>
+            
+<!-- منوی ناوبری -->
+<nav>
+    <ul class="nav-links">
+        <li><a href="{% url 'main:home' %}"><i class="fas fa-home"></i> خانه</a></li>
+        <li><a href="#about-section"><i class="fas fa-info-circle"></i> درباره ما</a></li>
+        <li><a href="#new-order-section"><i class="fas fa-plus-circle"></i> ثبت سفارش</a></li>
+        <li><a href="#pending-orders-section"><i class="fas fa-clock"></i> سفارشات منتظر خیاط</a></li>
+        <li><a href="#contact"><i class="fas fa-envelope"></i> تماس با ما</a></li>
+    </ul>
+</nav>
+            
+            <!-- بخش جستجو -->
+            <div class="search-section">
+                <div class="search-box">
+                    <input type="text" placeholder="جستجو...">
+                    <button class="search-btn"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+            
+            <!-- دکمه‌های ورود و ثبت‌نام -->
+            <div class="auth-buttons">
+                {% if user.is_authenticated %}
+                <div class="profile-display">
+                    <a href="{% url 'main:profile' %}" class="profile-icon" title="پروفایل">
+                        {{ user.username|first|upper }}
+                    </a>
+                    <div class="user-info">
+                        <span class="user-name">{{ user.username }}</span>
+                        <span class="user-type">
+                            {% if user.user_type == 'customer' %}
+                            مشتری
+                            {% else %}
+                            خیاط
+                            {% endif %}
+                        </span>
+                    </div>
+                    <a href="{% url 'main:logout' %}" class="logout-btn" title="خروج">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </a>
+                </div>
+                {% else %}
+                <div class="auth-links">
+                    <a href="{% url 'main:customer_auth' %}" class="btn login-btn">
+                        <i class="fas fa-user"></i> ورود مشتری
+                    </a>
+                    <a href="{% url 'main:tailor_auth' %}" class="btn register-btn">
+                        <i class="fas fa-cut"></i> ورود خیاط
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- آیکون منو برای موبایل -->
+            <div class="menu-toggle" id="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+    
+    <!-- نمایش پیام‌های سیستم -->
+    {% if messages %}
+    <div class="messages-container">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            <i class="fas fa-{% if message.tags == 'success' %}check-circle{% else %}exclamation-circle{% endif %}"></i>
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <!-- هیرو سکشن تبلیغاتی -->
+    <section class="hero-section">
+        <div class="hero-slider">
+            <!-- اسلاید 1 -->
+            <div class="hero-slide active" id="slide1">
+                <div class="hero-content">
+                    <h1 class="hero-title">ارائه تخصصی‌ترین خدمات خیاطی به صورت آنلاین در سراسر کشور</h1>
+                    <p class="hero-description">با سبزکار، بهترین خیاطان حرفه‌ای را برای دوخت لباس دلخواهتان پیدا کنید. کیفیت بالا، قیمت مناسب و تحویل سریع تنها بخشی از خدمات ماست.</p>
+                    <p class="hero-extra">ما با بیش از ۵۰۰ خیاط ماهر در سراسر ایران همکاری می‌کنیم تا هر نوع سلیقه‌ای را پاسخگو باشیم.</p>
+                </div>
+                <div class="hero-overlay"></div>
+            </div>
+            
+            <!-- اسلاید 2 -->
+            <div class="hero-slide" id="slide2">
+                <div class="hero-content">
+                    <h1 class="hero-title">صدها مدل شیک و متنوع برای تمام سنین و سلیقه‌ها</h1>
+                    <p class="hero-description">از لباس‌های مجلسی و روزمره تا مدل‌های خاص و سفارشی. با جدیدترین طرح‌های روز دنیا همراه شما هستیم.</p>
+                    <p class="hero-extra">تنوع بی‌نظیر در پارچه‌ها، رنگ‌ها و مدل‌ها، انتخاب را برای شما لذت‌بخش می‌کند.</p>
+                </div>
+                <div class="hero-overlay"></div>
+            </div>
+            
+            <!-- اسلاید 3 -->
+            <div class="hero-slide" id="slide3">
+                <div class="hero-content">
+                    <h1 class="hero-title">فرصت همکاری ویژه برای خیاطان talent و باانگیزه</h1>
+                    <p class="hero-description">اگر در دوخت و دوز مهارت دارید، به خانواده بزرگ سبزکار بپیوندید. درآمد خود را افزایش دهید و به مشتریان بیشتری دسترسی پیدا کنید.</p>
+                    <p class="hero-extra">پشتیبانی کامل، آموزش‌های تخصصی و بازار کار گسترده در انتظار شماست.</p>
+                </div>
+                <div class="hero-overlay"></div>
+            </div>
+            
+            <!-- دکمه‌های کنترل اسلاید -->
+            <button class="slide-control prev-slide">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            <button class="slide-control next-slide">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            
+            <!-- نشانگرهای اسلاید -->
+            <div class="slide-indicators">
+                <button class="indicator active" data-slide="0"></button>
+                <button class="indicator" data-slide="1"></button>
+                <button class="indicator" data-slide="2"></button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- محتوای اصلی -->
+    <main class="container">
+        <div class="content">
+            <h1>به سبزکار خوش آمدید</h1>
+            <p>پلتفرم تخصصی ارتباط مستقیم بین مشتریان و خیاطان حرفه‌ای. با سبزکار می‌توانید به سادگی سفارش دوخت لباس مورد نظر خود را ثبت کنید یا اگر خیاط هستید، خدمات خود را ارائه دهید.</p>
+            
+            <div class="features">
+                <div class="feature">
+                    <i class="fas fa-truck"></i>
+                    <h3>تحویل سریع</h3>
+                    <p>تحویل در کمترین زمان ممکن در سراسر کشور</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-award"></i>
+                    <h3>کیفیت عالی</h3>
+                    <p>استفاده از بهترین پارچه‌ها و دوخت حرفه‌ای</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-users"></i>
+                    <h3>خیاطان متخصص</h3>
+                    <p>همکاری با صدها خیاط ماهر و با تجربه</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-headset"></i>
+                    <h3>پشتیبانی 24/7</h3>
+                    <p>پشتیبانی آنلاین در تمام ساعات شبانه روز</p>
+                </div>
+            </div>
+            
+            <div class="cta-section">
+                <h2>همین امروز به جمع ما بپیوندید</h2>
+                <p>چه به عنوان مشتری و چه به عنوان خیاط، فرصت‌های بی‌شماری در انتظار شماست.</p>
+                <div class="cta-buttons">
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'main:profile' %}" class="cta-btn primary">
+                        <i class="fas fa-user-circle"></i> پروفایل من
+                    </a>
+                    {% if user.user_type == 'customer' %}
+                    <a href="#products-section" class="cta-btn secondary">
+                        <i class="fas fa-shopping-bag"></i> مشاهده محصولات
+                    </a>
+                    {% else %}
+                    <a href="#services-section" class="cta-btn secondary">
+                        <i class="fas fa-chart-line"></i> مدیریت خدمات
+                    </a>
+                    {% endif %}
+                    {% else %}
+                    <a href="{% url 'main:customer_auth' %}" class="cta-btn primary">
+                        <i class="fas fa-user-plus"></i> ثبت نام رایگان
+                    </a>
+                    <a href="#about-section" class="cta-btn secondary">
+                        <i class="fas fa-info-circle"></i> اطلاعات بیشتر
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- بخش درباره ما -->
+    <section id="about-section" class="about-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>درباره سبزکار</h2>
+                <p>پلتفرم تخصصی خدمات خیاطی آنلاین، پیوندی بین هنر خیاطی و تکنولوژی روز</p>
+            </div>
+            
+            <div class="about-content">
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1458&q=80" alt="درباره سبزکار">
+                </div>
+                
+                <div class="about-text">
+                    <h3>داستان ما</h3>
+                    <p>سبزکار در سال ۱۴۰۰ با یک ایده ساده اما قدرتمند شروع به کار کرد: ایجاد پلی بین خیاطان ماهر و مشتریانی که به دنبال لباس‌های با کیفیت و منحصربه‌فرد هستند. ما معتقدیم هر فرد سلیقه و نیاز خاص خود را دارد و باید بتواند لباسی مطابق با سلیقه و اندازه دقیق خود داشته باشد.</p>
+                    
+                    <h3>ماموریت ما</h3>
+                    <p>ما با ایجاد یک پلتفرم آنلاین جامع، فرآیند سفارش و تولید لباس را برای مشتریان ساده‌تر کرده و فرصت‌های شغلی جدیدی برای خیاطان ایجاد کرده‌ایم. هدف ما ترویج هنر خیاطی ایرانی و ارائه خدمات با کیفیت جهانی است.</p>
+                    
+                    <div class="stats">
+                        <div class="stat">
+                            <span class="stat-number">۵۰۰+</span>
+                            <span class="stat-label">خیاط همکار</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">۱۰,۰۰۰+</span>
+                            <span class="stat-label">سفارش موفق</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">۹۸%</span>
+                            <span class="stat-label">رضایت مشتری</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">۳۰+</span>
+                            <span class="stat-label">شهر تحت پوشش</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- بخش محصولات -->
+<!-- بخش ثبت سفارش -->
+<section id="new-order-section" class="products-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>ثبت سفارش خیاطی جدید</h2>
+            <p>طرح و مدل دلخواه خود را ارسال کنید و از بهترین خیاطان پیشنهاد قیمت دریافت کنید</p>
+        </div>
+        
+        <div class="order-steps">
+            <div class="step">
+                <div class="step-icon">
+                    <i class="fas fa-upload"></i>
+                </div>
+                <h3>آپلود طرح</h3>
+                <p>عکس مدل مورد نظر خود را آپلود کنید</p>
+            </div>
+            <div class="step">
+                <div class="step-icon">
+                    <i class="fas fa-ruler-combined"></i>
+                </div>
+                <h3>وارد کردن سایز</h3>
+                <p>سایز و اندازه‌های دقیق خود را وارد کنید</p>
+            </div>
+            <div class="step">
+                <div class="step-icon">
+                    <i class="fas fa-money-bill-wave"></i>
+                </div>
+                <h3>تعیین بودجه</h3>
+                <p>حداکثر بودجه و زمان تحویل را مشخص کنید</p>
+            </div>
+            <div class="step">
+                <div class="step-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3>دریافت پیشنهاد</h3>
+                <p>پیشنهادات خیاطان را مقایسه و بهترین را انتخاب کنید</p>
+            </div>
+        </div>
+        
+        <div class="cta-center">
+            {% if user.is_authenticated and user.user_type == 'customer' %}
+                <a href="{% url 'main:create_order' %}" class="cta-btn primary">
+                    <i class="fas fa-plus-circle"></i>
+                    شروع ثبت سفارش
+                </a>
+            {% elif user.is_authenticated and user.user_type == 'tailor' %}
+                <p class="info-message">شما به عنوان خیاط وارد شده‌اید. برای ثبت سفارش باید با حساب مشتری وارد شوید.</p>
+                <a href="{% url 'main:customer_auth' %}" class="cta-btn secondary">
+                    <i class="fas fa-sign-in-alt"></i>
+                    تغییر به حساب مشتری
+                </a>
+            {% else %}
+                <a href="{% url 'main:customer_auth' %}" class="cta-btn primary">
+                    <i class="fas fa-sign-in-alt"></i>
+                    ورود/ثبت نام مشتری
+                </a>
+                <p class="info-message">برای ثبت سفارش ابتدا وارد حساب مشتری شوید</p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<style>
+    /* استایل بخش ثبت سفارش */
+    #new-order-section {
+        background: linear-gradient(135deg, rgba(46, 125, 50, 0.05) 0%, rgba(76, 175, 80, 0.05) 100%);
+        padding: 80px 0;
+        margin: 60px 0;
+        position: relative;
+        overflow: hidden;
+        border-radius: 20px;
+    }
+
+    #new-order-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(46, 125, 50, 0.1) 0%, rgba(46, 125, 50, 0) 70%);
+        border-radius: 50%;
+        transform: translate(50%, -50%);
+    }
+
+    #new-order-section::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 200px;
+        height: 200px;
+        background: radial-gradient(circle, rgba(76, 175, 80, 0.1) 0%, rgba(76, 175, 80, 0) 70%);
+        border-radius: 50%;
+        transform: translate(-50%, 50%);
+    }
+
+    #new-order-section .container {
+        position: relative;
+        z-index: 1;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    .section-header {
+        text-align: center;
+        margin-bottom: 60px;
+    }
+
+    .section-header h2 {
+        color: var(--dark-green);
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+        position: relative;
+        display: inline-block;
+    }
+
+    .section-header h2::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        right: 50%;
+        transform: translateX(50%);
+        width: 100px;
+        height: 4px;
+        background: linear-gradient(to left, var(--primary-green), var(--light-green));
+        border-radius: 2px;
+    }
+
+    .section-header p {
+        color: #666;
+        font-size: 1.1rem;
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+    }
+
+    /* مراحل ثبت سفارش */
+    .order-steps {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 30px;
+        margin-bottom: 50px;
+        position: relative;
+    }
+
+    .order-steps::before {
+        content: '';
+        position: absolute;
+        top: 60px;
+        right: calc(25% - 15px);
+        left: calc(25% - 15px);
+        height: 3px;
+        background: linear-gradient(to left, var(--primary-green), var(--light-green));
+        z-index: 0;
+    }
+
+    @media (max-width: 992px) {
+        .order-steps {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+        }
+        
+        .order-steps::before {
+            display: none;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .order-steps {
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+    }
+
+    .step {
+        text-align: center;
+        position: relative;
+        z-index: 1;
+        background: var(--white);
+        padding: 30px 20px;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        border: 1px solid rgba(46, 125, 50, 0.1);
+    }
+
+    .step:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 40px rgba(46, 125, 50, 0.15);
+        border-color: var(--primary-green);
+    }
+
+    .step-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        color: white;
+        font-size: 2rem;
+        box-shadow: 0 8px 20px rgba(46, 125, 50, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .step:hover .step-icon {
+        transform: scale(1.1);
+    }
+
+    .step h3 {
+        color: var(--dark-green);
+        font-size: 1.3rem;
+        margin-bottom: 10px;
+        font-weight: 600;
+    }
+
+    .step p {
+        color: #666;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        margin: 0;
+    }
+
+    /* دکمه‌های CTA */
+    .cta-center {
+        text-align: center;
+        margin-top: 40px;
+    }
+
+    .cta-btn {
+        padding: 16px 40px;
+        border-radius: 30px;
+        font-family: 'Vazirmatn', sans-serif;
+        font-weight: 600;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin: 10px;
+    }
+
+    .cta-btn.primary {
+        background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+        color: white;
+        box-shadow: 0 8px 25px rgba(46, 125, 50, 0.3);
+    }
+
+    .cta-btn.primary:hover {
+        background: linear-gradient(135deg, var(--dark-green), var(--primary-green));
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(46, 125, 50, 0.4);
+    }
+
+    .cta-btn.secondary {
+        background: var(--white);
+        color: var(--primary-green);
+        border: 2px solid var(--primary-green);
+        box-shadow: 0 8px 25px rgba(46, 125, 50, 0.1);
+    }
+
+    .cta-btn.secondary:hover {
+        background: var(--primary-green);
+        color: white;
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(46, 125, 50, 0.3);
+    }
+
+    .info-message {
+        color: #666;
+        font-size: 1.1rem;
+        margin-top: 25px;
+        padding: 15px 25px;
+        background: rgba(46, 125, 50, 0.08);
+        border-radius: 10px;
+        border-right: 4px solid var(--primary-green);
+        display: inline-block;
+        max-width: 600px;
+        text-align: center;
+    }
+
+    /* انیمیشن‌ها */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .step {
+        animation: fadeInUp 0.5s ease-out;
+    }
+
+    .step:nth-child(1) { animation-delay: 0.1s; }
+    .step:nth-child(2) { animation-delay: 0.2s; }
+    .step:nth-child(3) { animation-delay: 0.3s; }
+    .step:nth-child(4) { animation-delay: 0.4s; }
+
+    /* رسپانسیو */
+    @media (max-width: 768px) {
+        #new-order-section {
+            padding: 60px 0;
+            margin: 40px 0;
+            border-radius: 15px;
+        }
+        
+        .section-header h2 {
+            font-size: 2rem;
+        }
+        
+        .section-header p {
+            font-size: 1rem;
+        }
+        
+        .cta-btn {
+            padding: 14px 30px;
+            font-size: 1.1rem;
+        }
+        
+        .info-message {
+            font-size: 1rem;
+            padding: 12px 20px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        #new-order-section {
+            padding: 40px 0;
+            margin: 30px 0;
+            border-radius: 10px;
+        }
+        
+        .section-header h2 {
+            font-size: 1.8rem;
+        }
+        
+        .step {
+            padding: 25px 15px;
+        }
+        
+        .step-icon {
+            width: 70px;
+            height: 70px;
+            font-size: 1.8rem;
+        }
+        
+        .step h3 {
+            font-size: 1.2rem;
+        }
+        
+        .step p {
+            font-size: 0.9rem;
+        }
+        
+        .cta-btn {
+            padding: 12px 25px;
+            font-size: 1rem;
+            margin: 5px;
+        }
+    }
+</style>
+    <!-- بخش سفارشات منتظر خیاط -->
+<section id="pending-orders-section" class="services-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>سفارشات منتظر خیاط</h2>
+            <p>بهترین فرصت‌های کاری برای خیاطان حرفه‌ای</p>
+        </div>
+        
+        <div class="services-container">
+            <!-- سفارش نمونه 1 -->
+            <div class="service-card">
+                <div class="service-image">
+                    <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80" alt="سفارش لباس مجلسی">
+                    <span class="service-badge">بودجه: ۲,۵۰۰,۰۰۰ تومان</span>
+                </div>
+                <div class="service-info">
+                    <h3>لباس مجلسی شیک زنانه</h3>
+                    <p class="service-description">سفارش دوخت لباس مجلسی با طراحی مدرن و پارچه ابریشمی لطیف...</p>
+                    
+                    <div class="service-features">
+                        <span class="feature-tag"><i class="fas fa-ruler"></i> سایز: M</span>
+                        <span class="feature-tag"><i class="fas fa-clock"></i> مهلت: ۱۴ روز</span>
+                        <span class="feature-tag"><i class="fas fa-map-marker-alt"></i> تهران</span>
+                    </div>
+                    
+                    <div class="service-price">
+                        <div>
+                            <span class="price">بودجه: ۲,۵۰۰,۰۰۰ تومان</span>
+                            <span class="deadline">مهلت: ۱۴ روز</span>
+                        </div>
+                        {% if user.is_authenticated and user.user_type == 'tailor' %}
+                        <button class="order-service">
+                            <i class="fas fa-paper-plane"></i>
+                            ارسال پیشنهاد
+                        </button>
+                        {% else %}
+                        <a href="{% url 'main:tailor_auth' %}" class="order-service">
+                            <i class="fas fa-sign-in-alt"></i>
+                            ورود به عنوان خیاط
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- سفارش نمونه 2 -->
+            <div class="service-card">
+                <div class="service-image">
+                    <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1480&q=80" alt="سفارش کت و شلوار">
+                    <span class="service-badge">بودجه: ۳,۲۰۰,۰۰۰ تومان</span>
+                </div>
+                <div class="service-info">
+                    <h3>کت و شلوار کلاسیک مردانه</h3>
+                    <p class="service-description">سفارش دوخت کت و شلوار رسمی با پارچه مرغوب برای محیط کاری...</p>
+                    
+                    <div class="service-features">
+                        <span class="feature-tag"><i class="fas fa-ruler"></i> سایز: L</span>
+                        <span class="feature-tag"><i class="fas fa-clock"></i> مهلت: ۱۰ روز</span>
+                        <span class="feature-tag"><i class="fas fa-map-marker-alt"></i> اصفهان</span>
+                    </div>
+                    
+                    <div class="service-price">
+                        <div>
+                            <span class="price">بودجه: ۳,۲۰۰,۰۰۰ تومان</span>
+                            <span class="deadline">مهلت: ۱۰ روز</span>
+                        </div>
+                        {% if user.is_authenticated and user.user_type == 'tailor' %}
+                        <button class="order-service">
+                            <i class="fas fa-paper-plane"></i>
+                            ارسال پیشنهاد
+                        </button>
+                        {% else %}
+                        <a href="{% url 'main:tailor_auth' %}" class="order-service">
+                            <i class="fas fa-sign-in-alt"></i>
+                            ورود به عنوان خیاط
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- سفارش نمونه 3 -->
+            <div class="service-card">
+                <div class="service-image">
+                    <img src="https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80" alt="سفارش لباس کودک">
+                    <span class="service-badge">بودجه: ۸۵۰,۰۰۰ تومان</span>
+                </div>
+                <div class="service-info">
+                    <h3>ست نوزادی پسرانه</h3>
+                    <p class="service-description">سفارش دوخت ست کامل نوزادی از جنس پارچه نخی لطیف و ضدحساسیت...</p>
+                    
+                    <div class="service-features">
+                        <span class="feature-tag"><i class="fas fa-ruler"></i> سایز: نوزاد</span>
+                        <span class="feature-tag"><i class="fas fa-clock"></i> مهلت: ۷ روز</span>
+                        <span class="feature-tag"><i class="fas fa-map-marker-alt"></i> مشهد</span>
+                    </div>
+                    
+                    <div class="service-price">
+                        <div>
+                            <span class="price">بودجه: ۸۵۰,۰۰۰ تومان</span>
+                            <span class="deadline">مهلت: ۷ روز</span>
+                        </div>
+                        {% if user.is_authenticated and user.user_type == 'tailor' %}
+                        <button class="order-service">
+                            <i class="fas fa-paper-plane"></i>
+                            ارسال پیشنهاد
+                        </button>
+                        {% else %}
+                        <a href="{% url 'main:tailor_auth' %}" class="order-service">
+                            <i class="fas fa-sign-in-alt"></i>
+                            ورود به عنوان خیاط
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="cta-center">
+            <a href="{% url 'main:orders_list' %}" class="cta-btn secondary">
+                <i class="fas fa-list"></i>
+                مشاهده همه سفارشات
+            </a>
+        </div>
+    </div>
+</section>
+
+    <!-- فوتر -->
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>درباره سبزکار</h3>
+                <p>سبزکار اولین پلتفرم تخصصی خدمات خیاطی آنلاین در ایران است که ارتباط مستقیم بین مشتریان و خیاطان حرفه‌ای را فراهم می‌کند.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-telegram"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3>لینک‌های سریع</h3>
+                <ul class="footer-links">
+                    <li><a href="{% url 'main:home' %}"><i class="fas fa-chevron-left"></i> صفحه اصلی</a></li>
+                    <li><a href="#about-section"><i class="fas fa-chevron-left"></i> درباره ما</a></li>
+                    <li><a href="#products-section"><i class="fas fa-chevron-left"></i> محصولات</a></li>
+                    <li><a href="#services-section"><i class="fas fa-chevron-left"></i> خدمات</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>خدمات مشتریان</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-chevron-left"></i> راهنمای خرید</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-left"></i> سوالات متداول</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-left"></i> شرایط استفاده</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-left"></i> حریم خصوصی</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>تماس با ما</h3>
+                <p><i class="fas fa-map-marker-alt"></i> تهران، خیابان ولیعصر</p>
+                <p><i class="fas fa-phone"></i> ۰۲۱-۱۲۳۴۵۶۷۸</p>
+                <p><i class="fas fa-envelope"></i> info@sezkar.com</p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>تمامی حقوق این وبسایت متعلق به سبزکار می‌باشد © ۲۰۲۳</p>
+        </div>
+    </footer>
+    
+    <!-- اسکریپت‌ها -->
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/modal.js' %}"></script>
+    <script src="{% static 'js/hero-slider.js' %}"></script>
+    <script src="{% static 'js/products.js' %}"></script>
+</body>
+</html>

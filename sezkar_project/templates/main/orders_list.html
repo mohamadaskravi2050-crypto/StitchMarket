@@ -1,0 +1,1472 @@
+{% load static %}
+<!DOCTYPE html> 
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سبزکار | داشبورد سفارشات</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        /* استایل‌های اختصاصی داشبورد */
+        :root {
+            --primary-green: #2e7d32;
+            --light-green: #4caf50;
+            --dark-green: #1b5e20;
+            --light-gray: #f5f5f5;
+            --medium-gray: #e0e0e0;
+            --dark-gray: #333;
+            --white: #ffffff;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        /* هدر */
+        .dashboard-header {
+            background-color: var(--white);
+            box-shadow: var(--shadow);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 15px 0;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--dark-green);
+            font-weight: 700;
+            font-size: 1.8rem;
+        }
+        
+        .logo-icon {
+            margin-left: 10px;
+            font-size: 2rem;
+        }
+        
+        .logo-text span {
+            color: var(--primary-green);
+        }
+        
+        .back-btn {
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+        }
+        
+        .back-btn:hover {
+            background-color: var(--medium-gray);
+        }
+        
+        /* بخش جستجو */
+        .search-section {
+            flex-grow: 1;
+            max-width: 400px;
+            margin: 0 30px;
+        }
+        
+        .search-box {
+            display: flex;
+            background-color: var(--light-gray);
+            border-radius: 25px;
+            overflow: hidden;
+            border: 2px solid var(--medium-gray);
+        }
+        
+        .search-box input {
+            flex-grow: 1;
+            border: none;
+            padding: 12px 20px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 1rem;
+            background: transparent;
+            outline: none;
+        }
+        
+        .search-btn {
+            background-color: var(--primary-green);
+            color: var(--white);
+            border: none;
+            padding: 12px 25px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .search-btn:hover {
+            background-color: var(--dark-green);
+        }
+        
+        /* بخش احراز هویت */
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .create-order-btn {
+            background-color: var(--primary-green);
+            color: var(--white);
+            margin-left: 15px;
+        }
+        
+        .create-order-btn:hover {
+            background-color: var(--dark-green);
+        }
+        
+        /* نمایش پروفایل */
+        .profile-display {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 5px 15px;
+            background-color: rgba(46, 125, 50, 0.1);
+            border-radius: 25px;
+            border: 1px solid rgba(46, 125, 50, 0.2);
+        }
+        
+        .profile-display .profile-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-green);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+        
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .user-name {
+            font-weight: 600;
+            color: var(--dark-green);
+            font-size: 0.9rem;
+        }
+        
+        .user-type {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        /* محتوای اصلی */
+        .container {
+            max-width: 1200px;
+            margin: 120px auto 50px;
+            padding: 0 20px;
+        }
+        
+        /* تب‌های داشبورد */
+        .dashboard-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        
+        .dashboard-tabs::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .tab-btn {
+            padding: 12px 25px;
+            background: var(--light-gray);
+            border: 2px solid transparent;
+            border-radius: 30px;
+            cursor: pointer;
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        
+        .tab-btn.active {
+            background: var(--primary-green);
+            color: white;
+            border-color: var(--primary-green);
+        }
+        
+        .tab-btn:hover:not(.active) {
+            background: var(--medium-gray);
+            transform: translateY(-2px);
+        }
+        
+        /* کارت‌های سفارش */
+        .orders-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .order-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            position: relative;
+        }
+        
+        .order-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(46, 125, 50, 0.15);
+            border-color: rgba(46, 125, 50, 0.2);
+        }
+        
+        /* تصویر کارت */
+        .order-image {
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .order-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .order-card:hover .order-image img {
+            transform: scale(1.05);
+        }
+        
+        /* آیکون پروفایل روی تصویر */
+        .profile-circle {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary-green);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+        
+        .profile-circle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .order-category {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(46, 125, 50, 0.9);
+            color: white;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            z-index: 2;
+        }
+        
+        /* اطلاعات سفارش */
+        .order-info {
+            padding: 25px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .order-info h3 {
+            font-size: 1.3rem;
+            color: var(--dark-green);
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        
+        .order-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #666;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .order-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .order-meta i {
+            color: var(--primary-green);
+        }
+        
+        .order-description {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+        
+        /* مشخصات فنی */
+        .order-specs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding: 15px;
+            background: rgba(46, 125, 50, 0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(46, 125, 50, 0.1);
+        }
+        
+        .spec {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #555;
+            font-size: 0.85rem;
+            flex: 1 0 calc(50% - 15px);
+        }
+        
+        .spec i {
+            color: var(--primary-green);
+            font-size: 1rem;
+        }
+        
+        /* دکمه‌های اقدام */
+        .order-actions {
+            margin-top: auto;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .offer-btn, .view-btn, .details-btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            text-decoration: none;
+        }
+        
+        .offer-btn {
+            background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+            color: white;
+        }
+        
+        .offer-btn:hover {
+            background: linear-gradient(135deg, var(--dark-green), var(--primary-green));
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(46, 125, 50, 0.3);
+        }
+        
+        .details-btn {
+            background: var(--light-gray);
+            color: #666;
+        }
+        
+        .details-btn:hover {
+            background: var(--medium-gray);
+            transform: translateY(-2px);
+        }
+        
+        .view-btn {
+            background: var(--light-gray);
+            color: #666;
+            cursor: not-allowed;
+        }
+        
+        /* تیک پیشنهاد ارسال شده */
+        .offer-sent {
+            position: absolute;
+            top: 15px;
+            left: 75px;
+            background: rgba(76, 175, 80, 0.9);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            z-index: 2;
+        }
+        
+        /* بخش توصیه‌های امنیتی */
+        .security-tips {
+            background: rgba(46, 125, 50, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 40px 0;
+            border: 2px solid rgba(46, 125, 50, 0.1);
+        }
+        
+        .security-tips h3 {
+            color: var(--dark-green);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .tip {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(46, 125, 50, 0.1);
+            display: flex;
+            gap: 15px;
+        }
+        
+        .tip-icon {
+            color: var(--primary-green);
+            font-size: 1.5rem;
+        }
+        
+        .tip-content h4 {
+            color: var(--dark-green);
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+        
+        .tip-content p {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        /* مودال ارسال پیشنهاد */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalFadeIn 0.3s ease;
+        }
+        
+        .modal-header {
+            padding: 25px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h3 {
+            color: var(--dark-green);
+            font-size: 1.5rem;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #666;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .close-modal:hover {
+            color: var(--dark-green);
+        }
+        
+        .modal-body {
+            padding: 25px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #444;
+        }
+        
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .form-input:focus, .form-textarea:focus {
+            border-color: var(--primary-green);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.2);
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .modal-actions button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+        
+        .send-offer-btn {
+            background: var(--primary-green);
+            color: white;
+        }
+        
+        .send-offer-btn:hover {
+            background: var(--dark-green);
+            transform: translateY(-2px);
+        }
+        
+        .cancel-offer-btn {
+            background: var(--light-gray);
+            color: #666;
+        }
+        
+        .cancel-offer-btn:hover {
+            background: var(--medium-gray);
+        }
+        
+        /* نتایج جستجو */
+        .search-results {
+            background: white;
+            border-radius: 15px;
+            margin-top: 10px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+            position: absolute;
+            width: 100%;
+            z-index: 100;
+        }
+        
+        .search-result-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .search-result-item:hover {
+            background: var(--light-gray);
+        }
+        
+        .search-result-item h4 {
+            color: var(--dark-green);
+            margin-bottom: 5px;
+        }
+        
+        .search-result-item p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        /* حالت خالی */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 80px 20px;
+            color: #999;
+            background: rgba(46, 125, 50, 0.05);
+            border-radius: 15px;
+            border: 2px dashed rgba(46, 125, 50, 0.2);
+            margin: 20px 0;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 25px;
+            color: rgba(46, 125, 50, 0.3);
+        }
+        
+        .empty-state h3 {
+            color: var(--dark-green);
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+        }
+        
+        .empty-state p {
+            color: #777;
+            font-size: 1.1rem;
+            max-width: 500px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        /* فوتر */
+        footer {
+            background: var(--dark-green);
+            color: white;
+            margin-top: 80px;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 50px 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: white;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--light-green);
+            border-radius: 2px;
+        }
+        
+        .footer-section p {
+            color: #e0e0e0;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+        
+        /* انیمیشن‌ها */
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* رسپانسیو */
+        @media (max-width: 992px) {
+            .orders-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+            
+            .header-container {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+            
+            .search-section {
+                order: 3;
+                max-width: 100%;
+                margin: 15px 0 0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin-top: 140px;
+            }
+            
+            .dashboard-tabs {
+                padding-bottom: 5px;
+            }
+            
+            .tab-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .order-specs {
+                padding: 12px;
+            }
+            
+            .spec {
+                flex: 1 0 100%;
+            }
+            
+            .order-actions {
+                flex-direction: column;
+            }
+            
+            .tips-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .header-container {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 15px;
+            }
+            
+            .logo {
+                justify-content: center;
+            }
+            
+            .back-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .auth-buttons {
+                justify-content: center;
+            }
+            
+            .create-order-btn {
+                margin-left: 0;
+                margin-top: 10px;
+                width: 100%;
+            }
+            
+            .profile-display {
+                justify-content: center;
+                width: 100%;
+            }
+            
+            .orders-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- هدر -->
+    <header class="dashboard-header">
+        <div class="header-container">
+            <!-- لوگو -->
+            <a href="{% url 'main:home' %}" class="logo">
+                <i class="fas fa-leaf logo-icon"></i>
+                <div class="logo-text">سبز<span>کار</span></div>
+            </a>
+            
+            <!-- دکمه بازگشت -->
+            <a href="{% url 'main:home' %}" class="btn back-btn">
+                <i class="fas fa-arrow-right"></i>
+                بازگشت به خانه
+            </a>
+            
+            <!-- بخش جستجو -->
+            <div class="search-section">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="جستجو در سفارشات...">
+                    <button class="search-btn"><i class="fas fa-search"></i></button>
+                </div>
+                <div class="search-results" id="searchResults"></div>
+            </div>
+            
+            <!-- بخش اقدامات -->
+            <div class="auth-buttons">
+                {% if user.is_authenticated and user.user_type == 'customer' %}
+                <a href="{% url 'main:create_order' %}" class="btn create-order-btn">
+                    <i class="fas fa-plus-circle"></i>
+                    ثبت سفارش جدید
+                </a>
+                {% endif %}
+                
+                {% if user.is_authenticated %}
+                <div class="profile-display">
+                    <a href="{% url 'main:profile' %}" class="profile-icon" title="پروفایل">
+                        {{ user.username|first|upper }}
+                    </a>
+                    <div class="user-info">
+                        <span class="user-name">{{ user.username }}</span>
+                        <span class="user-type">
+                            {% if user.user_type == 'customer' %}
+                            مشتری
+                            {% else %}
+                            خیاط
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+                {% else %}
+                <div class="auth-links">
+                    <a href="{% url 'main:customer_auth' %}" class="btn login-btn">
+                        <i class="fas fa-user"></i> ورود مشتری
+                    </a>
+                    <a href="{% url 'main:tailor_auth' %}" class="btn register-btn">
+                        <i class="fas fa-cut"></i> ورود خیاط
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+    
+    <!-- محتوای اصلی -->
+    <main class="container">
+        <!-- تب‌های داشبورد -->
+        <div class="dashboard-tabs" id="dashboardTabs">
+            {% if user.is_authenticated %}
+                {% if user.user_type == 'customer' %}
+                <button class="tab-btn active" data-tab="my-orders">
+                    <i class="fas fa-list-alt"></i>
+                    سفارشات من
+                </button>
+                <button class="tab-btn" data-tab="new-orders">
+                    <i class="fas fa-bell"></i>
+                    سفارشات جدید
+                    <span class="badge">۳</span>
+                </button>
+                <button class="tab-btn" data-tab="in-progress">
+                    <i class="fas fa-spinner"></i>
+                    در حال ساخت
+                </button>
+                <button class="tab-btn" data-tab="completed">
+                    <i class="fas fa-check-circle"></i>
+                    تکمیل شده
+                </button>
+                {% else %}
+                <button class="tab-btn active" data-tab="all-orders">
+                    <i class="fas fa-list"></i>
+                    همه سفارشات
+                </button>
+                <button class="tab-btn" data-tab="my-offers">
+                    <i class="fas fa-paper-plane"></i>
+                    پیشنهادات من
+                </button>
+                <button class="tab-btn" data-tab="accepted-offers">
+                    <i class="fas fa-handshake"></i>
+                    سفارشات پذیرفته شده
+                </button>
+                <button class="tab-btn" data-tab="completed-orders">
+                    <i class="fas fa-check-circle"></i>
+                    تکمیل شده
+                </button>
+                {% endif %}
+            {% else %}
+                <button class="tab-btn active" data-tab="all-orders">
+                    <i class="fas fa-list"></i>
+                    همه سفارشات
+                </button>
+            {% endif %}
+        </div>
+        
+        <!-- محتوای تب‌ها -->
+        <div id="tabContent">
+            {% if user.is_authenticated and user.user_type == 'customer' %}
+                <!-- تب سفارشات من -->
+                <div class="tab-pane active" id="my-orders">
+                    <h1 style="color: var(--dark-green); margin-bottom: 30px;">سفارشات من</h1>
+                    
+                    {% if user_orders %}
+                    <div class="orders-grid">
+                        {% for order in user_orders %}
+                        <div class="order-card">
+                            <div class="order-image">
+                                {% if order.design_image %}
+                                <img src="{{ order.design_image.url }}" alt="{{ order.title }}">
+                                {% else %}
+                                <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="{{ order.title }}">
+                                {% endif %}
+                                <div class="profile-circle" onclick="viewProfile('{{ order.customer.username }}')">
+                                    {{ order.customer.username|first|upper }}
+                                </div>
+                                <span class="order-category">{{ order.get_status_display }}</span>
+                            </div>
+                            
+                            <div class="order-info">
+                                <h3>{{ order.title }}</h3>
+                                
+                                <div class="order-meta">
+                                    <span><i class="fas fa-calendar-alt"></i> {{ order.created_at|date:"Y/m/d" }}</span>
+                                    <span><i class="fas fa-clock"></i> {{ order.deadline_days }} روز</span>
+                                </div>
+                                
+                                <p class="order-description">{{ order.description|truncatechars:120 }}</p>
+                                
+                                <div class="order-specs">
+                                    <span class="spec">
+                                        <i class="fas fa-money-bill-wave"></i>
+                                        بودجه: {{ order.max_budget|floatformat:0 }} تومان
+                                    </span>
+                                    <span class="spec">
+                                        <i class="fas fa-ruler"></i>
+                                        سایز: {{ order.get_size_display }}
+                                    </span>
+                                    {% if order.fabric_type %}
+                                    <span class="spec">
+                                        <i class="fas fa-tshirt"></i>
+                                        پارچه: {{ order.fabric_type }}
+                                    </span>
+                                    {% endif %}
+                                    {% if order.offers.count > 0 %}
+                                    <span class="spec">
+                                        <i class="fas fa-users"></i>
+                                        پیشنهادات: {{ order.offers.count }}
+                                    </span>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="order-actions">
+                                    <a href="#" class="details-btn">
+                                        <i class="fas fa-eye"></i>
+                                        مشاهده جزئیات
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-shopping-bag"></i>
+                        <h3>هنوز سفارشی ثبت نکرده‌اید</h3>
+                        <p>اولین سفارش خود را ثبت کنید و از بهترین خیاطان پیشنهاد دریافت کنید.</p>
+                        <a href="{% url 'main:create_order' %}" class="btn create-order-btn" style="margin-top: 20px; padding: 12px 30px;">
+                            <i class="fas fa-plus-circle"></i>
+                            ثبت سفارش جدید
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+            
+            <!-- تب همه سفارشات -->
+            <div class="tab-pane {% if not user.is_authenticated or user.user_type == 'tailor' %}active{% endif %}" id="all-orders">
+                <h1 style="color: var(--dark-green); margin-bottom: 30px;">سفارشات منتظر خیاط</h1>
+                
+                {% if recent_orders %}
+                <div class="orders-grid">
+                    {% for order in recent_orders %}
+                    <div class="order-card">
+                        <div class="order-image">
+                            {% if order.design_image %}
+                            <img src="{{ order.design_image.url }}" alt="{{ order.title }}">
+                            {% else %}
+                            <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="{{ order.title }}">
+                            {% endif %}
+                            
+                            <!-- دایره پروفایل -->
+                            <div class="profile-circle" onclick="viewProfile('{{ order.customer.username }}')">
+                                {{ order.customer.username|first|upper }}
+                            </div>
+                            
+                            <!-- اگر خیاط قبلاً پیشنهاد داده -->
+                            {% if user.is_authenticated and user.user_type == 'tailor' and order.id in sent_offers %}
+                            <div class="offer-sent">
+                                <i class="fas fa-check"></i>
+                                پیشنهاد ارسال شده
+                            </div>
+                            {% endif %}
+                            
+                            <span class="order-category">{{ order.get_size_display }}</span>
+                        </div>
+                        
+                        <div class="order-info">
+                            <h3>{{ order.title }}</h3>
+                            
+                            <div class="order-meta">
+                                <span><i class="fas fa-user"></i> {{ order.customer.username }}</span>
+                                <span><i class="fas fa-clock"></i> {{ order.created_at|date:"Y/m/d" }}</span>
+                            </div>
+                            
+                            <p class="order-description">{{ order.description|truncatechars:120 }}</p>
+                            
+                            <div class="order-specs">
+                                <span class="spec">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                    بودجه: {{ order.max_budget|floatformat:0 }} تومان
+                                </span>
+                                <span class="spec">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    مهلت: {{ order.deadline_days }} روز
+                                </span>
+                                {% if order.fabric_type %}
+                                <span class="spec">
+                                    <i class="fas fa-tshirt"></i>
+                                    پارچه: {{ order.fabric_type }}
+                                </span>
+                                {% endif %}
+                                {% if order.color_preference %}
+                                <span class="spec">
+                                    <i class="fas fa-palette"></i>
+                                    رنگ: {{ order.color_preference }}
+                                </span>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="order-actions">
+                                {% if user.is_authenticated and user.user_type == 'tailor' %}
+                                    {% if order.id in sent_offers %}
+                                    <button class="details-btn" disabled>
+                                        <i class="fas fa-check"></i>
+                                        پیشنهاد ارسال شده
+                                    </button>
+                                    {% else %}
+                                    <button class="offer-btn" onclick="openOfferModal('{{ order.id }}', '{{ order.title }}')">
+                                        <i class="fas fa-paper-plane"></i>
+                                        ارسال پیشنهاد
+                                    </button>
+                                    {% endif %}
+                                {% elif user.is_authenticated and user.user_type == 'customer' %}
+                                    {% if order.customer == user %}
+                                    <button class="view-btn" disabled>
+                                        <i class="fas fa-eye"></i>
+                                        سفارش شما
+                                    </button>
+                                    {% else %}
+                                    <button class="details-btn">
+                                        <i class="fas fa-eye"></i>
+                                        مشاهده جزئیات
+                                    </button>
+                                    {% endif %}
+                                {% else %}
+                                    <a href="{% url 'main:tailor_auth' %}" class="offer-btn">
+                                        <i class="fas fa-sign-in-alt"></i>
+                                        ورود به عنوان خیاط
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                {% if user.is_authenticated and user.user_type == 'tailor' %}
+                <div style="text-align: center; margin-top: 40px;">
+                    <a href="{% url 'main:orders_list' %}" class="btn" style="background: var(--primary-green); color: white; padding: 15px 40px;">
+                        <i class="fas fa-list"></i>
+                        مشاهده همه سفارشات
+                    </a>
+                </div>
+                {% endif %}
+                
+                {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-clock"></i>
+                    <h3>در حال حاضر هیچ سفارش فعالی موجود نیست</h3>
+                    <p>به زودی سفارشات جدید از سوی مشتریان نمایش داده می‌شوند.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- توصیه‌های امنیتی -->
+        <div class="security-tips">
+            <h3><i class="fas fa-shield-alt"></i> توصیه‌های امنیتی برای استفاده از سبزکار</h3>
+            <div class="tips-grid">
+                <div class="tip">
+                    <div class="tip-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <div class="tip-content">
+                        <h4>ارتباط امن</h4>
+                        <p>تا زمان تأیید نهایی، تمامی مکالمات را از طریق پیام‌رسان سبزکار انجام دهید.</p>
+                    </div>
+                </div>
+                <div class="tip">
+                    <div class="tip-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="tip-content">
+                        <h4>پرداخت امن</h4>
+                        <p>هیچ‌گاه وجهی را خارج از سیستم پرداخت سبزکار واریز نکنید.</p>
+                    </div>
+                </div>
+                <div class="tip">
+                    <div class="tip-icon">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <div class="tip-content">
+                        <h4>احراز هویت</h4>
+                        <p>از اعتبار خیاطان از طریق پروفایل تأیید شده آنان اطمینان حاصل کنید.</p>
+                    </div>
+                </div>
+                <div class="tip">
+                    <div class="tip-icon">
+                        <i class="fas fa-file-contract"></i>
+                    </div>
+                    <div class="tip-content">
+                        <h4>قرارداد</h4>
+                        <p>پیش از شروع کار، حتماً قرارداد الکترونیکی سبزکار را مطالعه و تأیید کنید.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- مودال ارسال پیشنهاد -->
+    <div class="modal-overlay" id="offerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>ارسال پیشنهاد</h3>
+                <button class="close-modal" onclick="closeOfferModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="offerForm">
+                    {% csrf_token %}
+                    <input type="hidden" id="orderId" name="order_id">
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="proposedPrice">قیمت پیشنهادی (تومان)</label>
+                        <input type="number" id="proposedPrice" name="proposed_price" class="form-input" placeholder="مثال: 1500000" required min="10000">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="deliveryDays">زمان تحویل (روز)</label>
+                        <input type="number" id="deliveryDays" name="delivery_days" class="form-input" placeholder="مثال: 14" required min="1" max="90">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="message">پیام به مشتری</label>
+                        <textarea id="message" name="message" class="form-textarea" placeholder="توضیحات اضافی درباره نحوه ساخت، مواد اولیه یا هر نکته دیگر..." rows="4"></textarea>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button type="submit" class="send-offer-btn">
+                            <i class="fas fa-paper-plane"></i>
+                            ارسال پیشنهاد
+                        </button>
+                        <button type="button" class="cancel-offer-btn" onclick="closeOfferModal()">
+                            <i class="fas fa-times"></i>
+                            انصراف
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- مودال نمایش پروفایل -->
+    <div class="modal-overlay" id="profileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>پروفایل کاربر</h3>
+                <button class="close-modal" onclick="closeProfileModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="text-align: center;">
+                    <div style="width: 100px; height: 100px; background: var(--primary-green); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 2.5rem; color: white; font-weight: bold; margin-bottom: 20px;" id="profileInitial">
+                    </div>
+                    <h3 id="profileUsername" style="color: var(--dark-green); margin-bottom: 10px;"></h3>
+                    <p id="profileType" style="color: #666; margin-bottom: 30px;"></p>
+                    <p style="color: #999; font-size: 0.9rem;">این بخش در حال توسعه است و به زودی اطلاعات کامل کاربر نمایش داده خواهد شد.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- فوتر -->
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>درباره سبزکار</h3>
+                <p>سبزکار اولین پلتفرم تخصصی خدمات خیاطی آنلاین در ایران است که ارتباط مستقیم بین مشتریان و خیاطان حرفه‌ای را فراهم می‌کند.</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3>لینک‌های سریع</h3>
+                <ul class="footer-links">
+                    <li><a href="{% url 'main:home' %}"><i class="fas fa-chevron-left"></i> صفحه اصلی</a></li>
+                    {% if user.is_authenticated and user.user_type == 'customer' %}
+                    <li><a href="{% url 'main:create_order' %}"><i class="fas fa-chevron-left"></i> ثبت سفارش جدید</a></li>
+                    {% endif %}
+                    <li><a href="{% url 'main:tailor_auth' %}"><i class="fas fa-chevron-left"></i> ورود خیاطان</a></li>
+                    <li><a href="{% url 'main:customer_auth' %}"><i class="fas fa-chevron-left"></i> ورود مشتریان</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>پشتیبانی</h3>
+                <p><i class="fas fa-phone"></i> ۰۲۱-۱۲۳۴۵۶۷۸</p>
+                <p><i class="fas fa-envelope"></i> support@sezkar.com</p>
+                <p><i class="fas fa-clock"></i> پاسخگویی: ۹ صبح تا ۹ شب</p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>تمامی حقوق این وبسایت متعلق به سبزکار می‌باشد © ۲۰۲۳</p>
+        </div>
+    </footer>
+    
+    <script>
+        // مدیریت تب‌ها
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabPanes = document.querySelectorAll('.tab-pane');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // حذف کلاس active از همه تب‌ها
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabPanes.forEach(pane => pane.classList.remove('active'));
+                    
+                    // اضافه کردن کلاس active به تب انتخاب شده
+                    this.classList.add('active');
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // جستجوی زنده
+            const searchInput = document.getElementById('searchInput');
+            const searchResults = document.getElementById('searchResults');
+            
+            searchInput.addEventListener('input', function() {
+                const query = this.value.trim();
+                
+                if (query.length > 1) {
+                    // در اینجا می‌توانید درخواست AJAX برای جستجو ارسال کنید
+                    // فعلاً نمونه داده‌ای نمایش می‌دهیم
+                    const sampleResults = [
+                        { title: 'لباس مجلسی شیک زنانه', customer: 'فاطمه', budget: '۲,۵۰۰,۰۰۰ تومان' },
+                        { title: 'کت و شلوار کلاسیک مردانه', customer: 'محمد', budget: '۳,۲۰۰,۰۰۰ تومان' },
+                        { title: 'ست نوزادی پسرانه', customer: 'زهرا', budget: '۸۵۰,۰۰۰ تومان' }
+                    ];
+                    
+                    const filteredResults = sampleResults.filter(result => 
+                        result.title.includes(query) || result.customer.includes(query)
+                    );
+                    
+                    if (filteredResults.length > 0) {
+                        searchResults.innerHTML = filteredResults.map(result => `
+                            <div class="search-result-item" onclick="selectSearchResult('${result.title}')">
+                                <h4>${result.title}</h4>
+                                <p>مشتری: ${result.customer} | بودجه: ${result.budget}</p>
+                            </div>
+                        `).join('');
+                        searchResults.style.display = 'block';
+                    } else {
+                        searchResults.innerHTML = '<div class="search-result-item"><p>نتیجه‌ای یافت نشد</p></div>';
+                        searchResults.style.display = 'block';
+                    }
+                } else {
+                    searchResults.style.display = 'none';
+                }
+            });
+            
+            // بستن نتایج جستجو هنگام کلیک خارج
+            document.addEventListener('click', function(event) {
+                if (!searchInput.contains(event.target) && !searchResults.contains(event.target)) {
+                    searchResults.style.display = 'none';
+                }
+            });
+        });
+        
+        // مدیریت مودال ارسال پیشنهاد
+        let currentOrderId = null;
+        
+        function openOfferModal(orderId, orderTitle) {
+            currentOrderId = orderId;
+            document.getElementById('orderId').value = orderId;
+            document.getElementById('offerModal').style.display = 'flex';
+            document.querySelector('#offerModal .modal-header h3').textContent = `ارسال پیشنهاد برای: ${orderTitle}`;
+        }
+        
+        function closeOfferModal() {
+            document.getElementById('offerModal').style.display = 'none';
+            document.getElementById('offerForm').reset();
+            currentOrderId = null;
+        }
+        
+        // مدیریت فرم ارسال پیشنهاد
+        document.getElementById('offerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            
+            // در اینجا می‌توانید درخواست AJAX ارسال کنید
+            fetch('{% url "main:send_offer" 0 %}'.replace('0', currentOrderId), {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('پیشنهاد شما با موفقیت ارسال شد!');
+                    closeOfferModal();
+                    // به روز رسانی رابط کاربری
+                    const offerBtn = document.querySelector(`[onclick="openOfferModal('${currentOrderId}')"]`);
+                    if (offerBtn) {
+                        offerBtn.outerHTML = `
+                            <button class="details-btn" disabled>
+                                <i class="fas fa-check"></i>
+                                پیشنهاد ارسال شده
+                            </button>
+                        `;
+                    }
+                } else {
+                    alert('خطا در ارسال پیشنهاد: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('خطا در ارتباط با سرور');
+            });
+        });
+        
+        // مدیریت مودال پروفایل
+        function viewProfile(username) {
+            document.getElementById('profileInitial').textContent = username.charAt(0).toUpperCase();
+            document.getElementById('profileUsername').textContent = username;
+            document.getElementById('profileType').textContent = 'کاربر سبزکار';
+            document.getElementById('profileModal').style.display = 'flex';
+        }
+        
+        function closeProfileModal() {
+            document.getElementById('profileModal').style.display = 'none';
+        }
+        
+        function selectSearchResult(title) {
+            document.getElementById('searchInput').value = title;
+            document.getElementById('searchResults').style.display = 'none';
+            // در اینجا می‌توانید جستجو را اجرا کنید
+        }
+        
+        // بستن مودال‌ها با کلید ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeOfferModal();
+                closeProfileModal();
+            }
+        });
+    </script>
+</body>
+</html>

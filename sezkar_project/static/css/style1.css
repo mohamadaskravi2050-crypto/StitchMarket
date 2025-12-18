@@ -1,0 +1,935 @@
+:root {
+    --primary-green: #2e7d32;
+    --light-green: #4caf50;
+    --dark-green: #1b5e20;
+    --white: #ffffff;
+    --light-gray: #f5f5f5;
+    --shadow: rgba(46, 125, 50, 0.15);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Vazirmatn', sans-serif;
+}
+
+body {
+    background-color: #f9f9f9;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* استایل هدر */
+header {
+    background-color: var(--white);
+    box-shadow: 0 4px 20px var(--shadow);
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    z-index: 1000;
+    padding: 15px 0;
+    transition: all 0.3s ease;
+}
+
+header.scrolled {
+    padding: 10px 0;
+    box-shadow: 0 4px 15px rgba(46, 125, 50, 0.2);
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* لوگو */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    animation: fadeInRight 0.8s ease-out;
+}
+
+.logo-icon {
+    color: var(--primary-green);
+    font-size: 28px;
+    transition: transform 0.5s ease;
+}
+
+.logo:hover .logo-icon {
+    transform: rotate(360deg);
+}
+
+.logo-text {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary-green);
+    letter-spacing: -0.5px;
+}
+
+.logo-text span {
+    color: var(--dark-green);
+}
+
+/* نوار ناوبری */
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+    animation: fadeInDown 0.8s ease-out;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    font-size: 1.05rem;
+    position: relative;
+    padding: 5px 0;
+    transition: color 0.3s ease;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--primary-green);
+    transition: width 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: var(--primary-green);
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+/* بخش جستجو */
+.search-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    animation: fadeInLeft 0.8s ease-out;
+}
+
+.search-box {
+    position: relative;
+    width: 250px;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 12px 45px 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 30px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.search-box input:focus {
+    border-color: var(--light-green);
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+}
+
+.search-btn {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: var(--primary-green);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-btn:hover {
+    background-color: var(--dark-green);
+    transform: translateY(-50%) scale(1.05);
+}
+
+/* دکمه‌های ورود و ثبت‌نام */
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+    animation: fadeInLeft 0.8s ease-out;
+}
+
+.btn {
+    padding: 10px 22px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    outline: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.login-btn {
+    background-color: transparent;
+    color: var(--primary-green);
+    border: 2px solid var(--primary-green);
+}
+
+.login-btn:hover {
+    background-color: rgba(46, 125, 50, 0.1);
+    transform: translateY(-2px);
+}
+
+.register-btn {
+    background-color: var(--primary-green);
+    color: white;
+    border: 2px solid var(--primary-green);
+}
+
+.register-btn:hover {
+    background-color: var(--dark-green);
+    border-color: var(--dark-green);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(46, 125, 50, 0.3);
+}
+
+/* پنجره مودال انتخاب نوع کاربر */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal {
+    background-color: white;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 400px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    animation: slideUp 0.4s ease-out;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.modal-title {
+    font-size: 1.4rem;
+    color: var(--primary-green);
+    font-weight: 700;
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #777;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-modal:hover {
+    color: var(--dark-green);
+}
+
+.user-type-selection {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.user-option {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 18px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.user-option:hover {
+    border-color: var(--light-green);
+    background-color: rgba(76, 175, 80, 0.05);
+}
+
+.user-option.selected {
+    border-color: var(--primary-green);
+    background-color: rgba(46, 125, 50, 0.1);
+}
+
+.user-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.user-icon.customer {
+    background-color: var(--primary-green);
+}
+
+.user-icon.tailor {
+    background-color: var(--dark-green);
+}
+
+.user-info h3 {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.user-info p {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.modal-btn {
+    padding: 12px 25px;
+    border-radius: 30px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    font-size: 1rem;
+}
+
+.cancel-btn {
+    background-color: #f5f5f5;
+    color: #555;
+}
+
+.cancel-btn:hover {
+    background-color: #e0e0e0;
+}
+
+.confirm-btn {
+    background-color: var(--primary-green);
+    color: white;
+}
+
+.confirm-btn:hover {
+    background-color: var(--dark-green);
+}
+
+/* منوی همبرگری برای موبایل */
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    width: 30px;
+    height: 25px;
+    justify-content: space-between;
+}
+
+.menu-toggle span {
+    height: 3px;
+    width: 100%;
+    background-color: var(--primary-green);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+/* محتوای اصلی */
+main {
+    margin-top: 30px;
+    padding: 40px 0;
+}
+
+.content {
+    text-align: center;
+    padding: 40px 20px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    animation: fadeInUp 1s ease-out;
+}
+
+.content h1 {
+    color: var(--dark-green);
+    margin-bottom: 20px;
+    font-size: 2.2rem;
+}
+
+.content > p {
+    color: #555;
+    line-height: 1.8;
+    font-size: 1.1rem;
+    margin-bottom: 40px;
+    max-width: 800px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.features {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin: 50px 0;
+}
+
+.feature {
+    background-color: #f0f9f0;
+    padding: 30px 20px;
+    border-radius: 15px;
+    width: 250px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 25px rgba(46, 125, 50, 0.15);
+}
+
+.feature i {
+    font-size: 3rem;
+    color: var(--primary-green);
+    margin-bottom: 20px;
+}
+
+.feature h3 {
+    color: var(--dark-green);
+    margin-bottom: 10px;
+    font-size: 1.4rem;
+}
+
+.feature p {
+    color: #666;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.cta-section {
+    background: linear-gradient(135deg, var(--primary-green), var(--dark-green));
+    padding: 50px 30px;
+    border-radius: 15px;
+    color: white;
+    margin-top: 40px;
+}
+
+.cta-section h2 {
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+.cta-section p {
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    opacity: 0.9;
+}
+
+.cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.cta-btn {
+    padding: 15px 30px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    min-width: 180px;
+}
+
+.cta-btn.primary {
+    background-color: white;
+    color: var(--primary-green);
+}
+
+.cta-btn.primary:hover {
+    background-color: #f5f5f5;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.cta-btn.secondary {
+    background-color: transparent;
+    color: white;
+    border: 2px solid white;
+}
+
+.cta-btn.secondary:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-3px);
+}
+
+/* فوتر */
+footer {
+    background-color: var(--dark-green);
+    color: white;
+    padding: 50px 0 20px;
+    margin-top: auto;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.footer-section {
+    flex: 1;
+    min-width: 250px;
+}
+
+.footer-section h3 {
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+    color: white;
+}
+
+.footer-section p {
+    line-height: 1.7;
+    opacity: 0.9;
+    margin-bottom: 20px;
+}
+
+.footer-links {
+    list-style: none;
+}
+
+.footer-links li {
+    margin-bottom: 10px;
+}
+
+.footer-links a {
+    color: white;
+    text-decoration: none;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+}
+
+.footer-links a:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+
+.social-icons {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.social-icons a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    color: white;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.social-icons a:hover {
+    background-color: var(--light-green);
+    transform: translateY(-3px);
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 20px;
+    margin-top: 40px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+/* انیمیشن‌ها */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* رسپانسیو */
+@media (max-width: 992px) {
+    .search-box {
+        width: 200px;
+    }
+    
+    .nav-links {
+        gap: 20px;
+    }
+    
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .hero-description {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        overflow-x: hidden;
+    }
+    
+    .menu-toggle {
+        display: flex;
+    }
+    
+    .nav-links {
+        position: fixed;
+        top: 70px;
+        right: 0;
+        background-color: white;
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px 0;
+        gap: 0;
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        transform: translateY(-100%);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s ease;
+        z-index: 999;
+    }
+    
+    .nav-links.active {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    .nav-links li {
+        width: 100%;
+        text-align: center;
+        padding: 15px 0;
+    }
+    
+    .nav-links li:hover {
+        background-color: rgba(46, 125, 50, 0.05);
+    }
+    
+    .nav-links a::after {
+        display: none;
+    }
+    
+    .search-section {
+        display: none;
+        position: fixed;
+        top: 70px;
+        right: 0;
+        width: 100%;
+        padding: 20px;
+        background-color: white;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        z-index: 998;
+    }
+    
+    .search-section.active {
+        display: flex;
+        justify-content: center;
+    }
+    
+    .search-box {
+        width: 100%;
+        max-width: 500px;
+    }
+    
+    .auth-buttons {
+        display: none;
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        padding: 15px;
+        background-color: white;
+        box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.05);
+        z-index: 997;
+        justify-content: center;
+    }
+    
+    .auth-buttons.active {
+        display: flex;
+    }
+    
+    .header-container {
+        position: relative;
+    }
+    
+    .menu-toggle.active span:nth-child(1) {
+        transform: rotate(45deg) translate(6px, 6px);
+    }
+    
+    .menu-toggle.active span:nth-child(2) {
+        opacity: 0;
+    }
+    
+    .menu-toggle.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -7px);
+    }
+    
+    /* تغییرات مودال برای موبایل */
+    .modal {
+        width: 95%;
+        padding: 20px;
+        margin: 10px;
+    }
+    
+    .user-option {
+        padding: 15px;
+    }
+    
+    .user-icon {
+        width: 45px;
+        height: 45px;
+        font-size: 1.3rem;
+    }
+    
+    /* تغییرات محتوا برای موبایل */
+    .features {
+        gap: 20px;
+    }
+    
+    .feature {
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .cta-btn {
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    /* هیرو سکشن برای موبایل */
+    .hero-section {
+        height: 70vh;
+        min-height: 400px;
+        margin-top: 70px;
+    }
+    
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-description {
+        font-size: 1.1rem;
+    }
+    
+    .hero-btn {
+        padding: 14px 30px;
+        font-size: 1.1rem;
+    }
+    
+    .slide-control {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo-text {
+        font-size: 1.5rem;
+    }
+    
+    .btn {
+        padding: 10px 18px;
+        font-size: 0.95rem;
+    }
+    
+    .content h1 {
+        font-size: 1.8rem;
+    }
+    
+    .content > p {
+        font-size: 1rem;
+    }
+    
+    .modal-title {
+        font-size: 1.2rem;
+    }
+    
+    .user-option {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+    
+    .modal-actions {
+        flex-direction: column;
+    }
+    
+    .modal-btn {
+        width: 100%;
+        text-align: center;
+    }
+    
+    .cta-section {
+        padding: 40px 20px;
+    }
+    
+    .cta-section h2 {
+        font-size: 1.6rem;
+    }
+    
+    /* هیرو سکشن برای موبایل کوچک */
+    .hero-section {
+        height: 60vh;
+        min-height: 350px;
+    }
+    
+    .hero-title {
+        font-size: 1.6rem;
+        margin-bottom: 15px;
+    }
+    
+    .hero-description {
+        font-size: 1rem;
+        margin-bottom: 20px;
+    }
+    
+    .hero-btn {
+        padding: 12px 25px;
+        font-size: 1rem;
+    }
+    
+    .slide-control {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
+    
+    .slide-indicators {
+        bottom: 20px;
+    }
+    
+    .indicator {
+        width: 12px;
+        height: 12px;
+    }
+}
